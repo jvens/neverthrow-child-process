@@ -216,4 +216,36 @@ describe('mapNodeError', () => {
     expect(mapped).toBeInstanceOf(UnknownError);
     expect(mapped.message).toBe('null');
   });
+
+  it('should handle error with no message property', () => {
+    const errorWithoutMessage = { code: 'ENOENT' };
+    const mapped = mapNodeError(errorWithoutMessage, 'test-cmd');
+
+    expect(mapped.message).toBe('Unknown error');
+    expect(mapped.name).toBe('ProcessNotFoundError');
+  });
+
+  it('should handle error with undefined message', () => {
+    const errorWithUndefinedMessage = { code: 'EACCES', message: undefined };
+    const mapped = mapNodeError(errorWithUndefinedMessage, 'test-cmd');
+
+    expect(mapped.message).toBe('Unknown error');
+    expect(mapped.name).toBe('PermissionDeniedError');
+  });
+
+  it('should handle error with null message', () => {
+    const errorWithNullMessage = { code: 'EPERM', message: null };
+    const mapped = mapNodeError(errorWithNullMessage, 'test-cmd');
+
+    expect(mapped.message).toBe('Unknown error');
+    expect(mapped.name).toBe('PermissionDeniedError');
+  });
+
+  it('should handle error with empty string message', () => {
+    const errorWithEmptyMessage = { code: 'ETIMEDOUT', message: '' };
+    const mapped = mapNodeError(errorWithEmptyMessage, 'test-cmd');
+
+    expect(mapped.message).toBe('');
+    expect(mapped.name).toBe('ProcessTimeoutError');
+  });
 });

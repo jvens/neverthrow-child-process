@@ -205,6 +205,34 @@ describe('Async child process wrappers', () => {
         expect(stdout.trim()).toBe('Shell spawn test');
       }
     });
+
+    it('should handle spawn with undefined args and options', async () => {
+      const result = await spawn('echo', undefined, undefined);
+
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        const { code } = await result.value.exitPromise;
+        expect(code).toBe(0);
+      }
+    });
+
+    it('should handle spawn with stdout capture when stdio is ignored', async () => {
+      const result = await spawn('echo', ['test'], { stdio: 'ignore' }, { captureStdout: true });
+
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        expect(result.value.stdout).toBeUndefined();
+      }
+    });
+
+    it('should handle spawn with stderr capture when stdio is ignored', async () => {
+      const result = await spawn('echo', ['test'], { stdio: 'ignore' }, { captureStderr: true });
+
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        expect(result.value.stderr).toBeUndefined();
+      }
+    });
   });
 
   describe('fork', () => {
@@ -248,6 +276,17 @@ describe('Async child process wrappers', () => {
         expect(result.error.name).toMatch(/ProcessNotFoundError|SpawnError/);
       }
     }, 3000);
+
+    it('should handle fork with undefined args and options', async () => {
+      const result = await fork(process.execPath, undefined, undefined);
+
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        expect(result.value).toBeDefined();
+        // Let it exit naturally
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    });
   });
 
   describe('waitForExit', () => {
@@ -277,6 +316,52 @@ describe('Async child process wrappers', () => {
         if (exitResult.isErr()) {
           expect(exitResult.error).toBeInstanceOf(NonZeroExitError);
           expect(exitResult.error.exitCode).toBe(1);
+        }
+      }
+    });
+
+    it('should handle waitForExit with signal termination', async () => {
+      // Create a process that we can kill
+      const spawnResult = await spawn('sleep', ['10']);
+
+      expect(spawnResult.isOk()).toBe(true);
+      if (spawnResult.isOk()) {
+        const child = spawnResult.value.process;
+
+        // Kill the process with SIGTERM
+        setTimeout(() => {
+          child.kill('SIGTERM');
+        }, 100);
+
+        const exitResult = await waitForExit(child);
+
+        expect(exitResult.isErr()).toBe(true);
+        if (exitResult.isErr()) {
+          expect(exitResult.error.name).toBe('ProcessKilledError');
+        }
+      }
+    }, 10000);
+
+    it('should handle waitForExit with child error event', async () => {
+      const spawnResult = await spawn('nonexistent-wait-test-command-xyz');
+
+      if (spawnResult.isOk()) {
+        const exitResult = await waitForExit(spawnResult.value.process);
+        expect(exitResult.isErr()).toBe(true);
+      }
+    });
+
+    it('should handle waitForExit error mapping for ProcessError types', async () => {
+      const spawnResult = await spawn('node', ['-e', 'process.exit(42)']);
+
+      expect(spawnResult.isOk()).toBe(true);
+      if (spawnResult.isOk()) {
+        const exitResult = await waitForExit(spawnResult.value.process);
+
+        expect(exitResult.isErr()).toBe(true);
+        if (exitResult.isErr()) {
+          expect(exitResult.error.name).toBe('NonZeroExitError');
+          expect(exitResult.error.exitCode).toBe(42);
         }
       }
     });

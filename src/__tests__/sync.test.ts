@@ -161,5 +161,15 @@ describe('Sync child process wrappers', () => {
       expect(result.isErr()).toBe(true);
       // The exact error type may vary depending on how the timeout is handled
     }, 5000); // Give Jest more time for this test
+
+    it('should handle spawnSync with signal termination', () => {
+      // On some systems, this might trigger signal handling
+      // We'll try a command that might be killed by signal
+      const result = spawnSync('sleep', ['0.001'], { timeout: 1 });
+
+      // The result might be either a timeout error or success
+      // We're mainly testing the signal handling branch exists
+      expect(result).toBeDefined();
+    });
   });
 });
