@@ -350,6 +350,113 @@ results
   });
 ```
 
+## Complete Examples
+
+This package includes comprehensive examples demonstrating various usage patterns and real-world scenarios. All examples are fully functional and can be run directly:
+
+### 📁 [Basic Usage Examples](https://github.com/jvens/neverthrow-child-process/tree/main/examples/1-basic-usage)
+
+Learn the fundamentals with these introductory examples:
+
+- **[sync-commands.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/1-basic-usage/sync-commands.ts)** - Synchronous command execution patterns
+- **[async-commands.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/1-basic-usage/async-commands.ts)** - Asynchronous operations and ResultAsync usage
+
+```bash
+# Run basic examples
+npx tsx examples/1-basic-usage/sync-commands.ts
+npx tsx examples/1-basic-usage/async-commands.ts
+```
+
+### 🚀 [Shell Script Automation](https://github.com/jvens/neverthrow-child-process/tree/main/examples/2-shell-script)
+
+Powerful shell automation examples for common development tasks:
+
+- **[simple-shell.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/2-shell-script/simple-shell.ts)** - Basic shell command automation
+- **[build-script.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/2-shell-script/build-script.ts)** - Complete build pipeline automation
+- **[parallel-shell.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/2-shell-script/parallel-shell.ts)** - Parallel command execution patterns
+
+```bash
+# Run shell automation examples
+npx tsx examples/2-shell-script/simple-shell.ts
+npx tsx examples/2-shell-script/build-script.ts
+npx tsx examples/2-shell-script/parallel-shell.ts
+```
+
+### 🌊 [Streaming Data Examples](https://github.com/jvens/neverthrow-child-process/tree/main/examples/3-streaming)
+
+Advanced streaming and parent-child communication patterns:
+
+- **[basic-streaming.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/3-streaming/basic-streaming.ts)** - Stream capture and processing
+- **[interactive-process.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/3-streaming/interactive-process.ts)** - Bidirectional communication with child processes
+- **[large-data-stream.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/3-streaming/large-data-stream.ts)** - Handling large data streams efficiently
+
+```bash
+# Run streaming examples
+npx tsx examples/3-streaming/basic-streaming.ts
+npx tsx examples/3-streaming/interactive-process.ts
+npx tsx examples/3-streaming/large-data-stream.ts
+```
+
+### ⚙️ [Process Management](https://github.com/jvens/neverthrow-child-process/tree/main/examples/4-process-management)
+
+Robust process lifecycle management and monitoring:
+
+- **[process-monitoring.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/4-process-management/process-monitoring.ts)** - Process health monitoring and metrics
+- **[graceful-shutdown.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/4-process-management/graceful-shutdown.ts)** - Proper signal handling and graceful shutdowns
+- **[long-running-process.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/4-process-management/long-running-process.ts)** - Managing long-running background processes
+
+```bash
+# Run process management examples
+npx tsx examples/4-process-management/process-monitoring.ts
+npx tsx examples/4-process-management/graceful-shutdown.ts
+npx tsx examples/4-process-management/long-running-process.ts
+```
+
+### 🏗️ [Advanced Patterns](https://github.com/jvens/neverthrow-child-process/tree/main/examples/5-advanced-patterns)
+
+Production-ready patterns for building robust applications:
+
+- **[error-handling.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/5-advanced-patterns/error-handling.ts)** - Advanced error handling with retry logic and circuit breakers
+- **[retry-logic.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/5-advanced-patterns/retry-logic.ts)** - Sophisticated retry strategies with exponential backoff
+- **[process-pool.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/5-advanced-patterns/process-pool.ts)** - Process pool management with auto-scaling and load balancing
+- **[pipeline.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/5-advanced-patterns/pipeline.ts)** - Command composition and data transformation pipelines
+
+```bash
+# Run advanced pattern examples
+npx tsx examples/5-advanced-patterns/error-handling.ts
+npx tsx examples/5-advanced-patterns/retry-logic.ts
+npx tsx examples/5-advanced-patterns/process-pool.ts
+npx tsx examples/5-advanced-patterns/pipeline.ts
+```
+
+### 🌍 [Real-World Use Cases](https://github.com/jvens/neverthrow-child-process/tree/main/examples/6-real-world)
+
+Complete real-world application demonstrating Git automation:
+
+- **[git-operations.ts](https://github.com/jvens/neverthrow-child-process/blob/main/examples/6-real-world/git-operations.ts)** - Comprehensive Git automation with repository management, branch operations, workflow automation, hooks simulation, and backup/restore functionality
+
+```bash
+# Run real-world Git automation example
+npx tsx examples/6-real-world/git-operations.ts
+```
+
+### 🔧 Running Examples
+
+All examples can be run directly with [tsx](https://github.com/esbuild-kit/tsx):
+
+```bash
+# Install tsx globally (if not already installed)
+npm install -g tsx
+
+# Or run with npx
+npx tsx examples/path/to/example.ts
+
+# Run all examples in a directory
+find examples/1-basic-usage -name "*.ts" -exec npx tsx {} \;
+```
+
+Each example directory includes a `README.md` with detailed explanations of the patterns and concepts demonstrated.
+
 ## Contributing
 
 Contributions are welcome! Please read our contributing guidelines and ensure all tests pass:
