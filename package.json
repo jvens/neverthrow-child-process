@@ -58,7 +58,7 @@
     "type-safe",
     "functional"
   ],
-  "author": "jvens",
+  "author": "Jeramie Vens",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
