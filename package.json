@@ -1,0 +1,93 @@
+{
+  "name": "@jvens/neverthrow-child-process",
+  "version": "0.1.0",
+  "description": "Node.js child_process wrapped in neverthrow Result types for type-safe error handling",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./sync": {
+      "require": "./dist/cjs/sync.js",
+      "import": "./dist/esm/sync.js",
+      "types": "./dist/types/sync.d.ts"
+    },
+    "./async": {
+      "require": "./dist/cjs/async.js",
+      "import": "./dist/esm/async.js",
+      "types": "./dist/types/async.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run test && npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvens/neverthrow-child-process.git"
+  },
+  "keywords": [
+    "neverthrow",
+    "child-process",
+    "subprocess",
+    "exec",
+    "spawn",
+    "result",
+    "error-handling",
+    "typescript",
+    "type-safe",
+    "functional"
+  ],
+  "author": "jvens",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/jvens/neverthrow-child-process/issues"
+  },
+  "homepage": "https://github.com/jvens/neverthrow-child-process#readme",
+  "peerDependencies": {
+    "neverthrow": "^6.0.0 || ^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-prettier": "^5.5.3",
+    "jest": "^30.0.5",
+    "neverthrow": "^8.2.0",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
