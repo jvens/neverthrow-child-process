@@ -112,7 +112,7 @@ describe('mapNodeError', () => {
   it('should map ENOENT error to ProcessNotFoundError', () => {
     const nodeError = { code: 'ENOENT', message: 'Command not found' };
     const mapped = mapNodeError(nodeError, 'test-cmd', ['arg1']);
-    
+
     expect(mapped).toBeInstanceOf(ProcessNotFoundError);
     expect(mapped.message).toBe('Command not found');
     expect(mapped.command).toBe('test-cmd');
@@ -122,7 +122,7 @@ describe('mapNodeError', () => {
   it('should map EACCES error to PermissionDeniedError', () => {
     const nodeError = { code: 'EACCES', message: 'Permission denied' };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(PermissionDeniedError);
     expect(mapped.message).toBe('Permission denied');
   });
@@ -130,7 +130,7 @@ describe('mapNodeError', () => {
   it('should map EPERM error to PermissionDeniedError', () => {
     const nodeError = { code: 'EPERM', message: 'Operation not permitted' };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(PermissionDeniedError);
     expect(mapped.message).toBe('Operation not permitted');
   });
@@ -138,15 +138,18 @@ describe('mapNodeError', () => {
   it('should map ETIMEDOUT error to ProcessTimeoutError', () => {
     const nodeError = { code: 'ETIMEDOUT', message: 'Operation timed out' };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(ProcessTimeoutError);
     expect(mapped.message).toBe('Operation timed out');
   });
 
   it('should map ERR_CHILD_PROCESS_ errors to SpawnError', () => {
-    const nodeError = { code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER', message: 'stdio maxBuffer exceeded' };
+    const nodeError = {
+      code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER',
+      message: 'stdio maxBuffer exceeded',
+    };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(SpawnError);
     expect(mapped.message).toBe('stdio maxBuffer exceeded');
   });
@@ -154,7 +157,7 @@ describe('mapNodeError', () => {
   it('should map signal termination to ProcessKilledError', () => {
     const nodeError = { signal: 'SIGTERM', message: 'Process terminated' };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(ProcessKilledError);
     expect(mapped.signal).toBe('SIGTERM');
   });
@@ -162,7 +165,7 @@ describe('mapNodeError', () => {
   it('should map non-zero exit codes to NonZeroExitError', () => {
     const nodeError = { code: 1, message: 'Command failed' };
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(NonZeroExitError);
     expect(mapped.exitCode).toBe(1);
   });
@@ -170,7 +173,7 @@ describe('mapNodeError', () => {
   it('should map maxBuffer error messages to MaxBufferExceededError', () => {
     const nodeError = new Error('stdout maxBuffer exceeded');
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(MaxBufferExceededError);
     expect(mapped.message).toBe('stdout maxBuffer exceeded');
   });
@@ -178,7 +181,7 @@ describe('mapNodeError', () => {
   it('should map timeout error messages to ProcessTimeoutError', () => {
     const nodeError = new Error('Process timeout');
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(ProcessTimeoutError);
     expect(mapped.message).toBe('Process timeout');
   });
@@ -186,7 +189,7 @@ describe('mapNodeError', () => {
   it('should map spawn error messages to SpawnError', () => {
     const nodeError = new Error('spawn ENOENT');
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(SpawnError);
     expect(mapped.message).toBe('spawn ENOENT');
   });
@@ -194,7 +197,7 @@ describe('mapNodeError', () => {
   it('should map unknown errors to UnknownError', () => {
     const nodeError = new Error('Some random error');
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(UnknownError);
     expect(mapped.message).toBe('Some random error');
   });
@@ -202,14 +205,14 @@ describe('mapNodeError', () => {
   it('should handle non-Error objects', () => {
     const nodeError = 'String error';
     const mapped = mapNodeError(nodeError, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(UnknownError);
     expect(mapped.message).toBe('String error');
   });
 
   it('should handle null/undefined errors', () => {
     const mapped = mapNodeError(null, 'test-cmd');
-    
+
     expect(mapped).toBeInstanceOf(UnknownError);
     expect(mapped.message).toBe('null');
   });

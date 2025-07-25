@@ -15,23 +15,25 @@ const __dirname = dirname(__filename);
 function runExample(examplePath) {
   try {
     console.log(`🔄 Compiling and running ${examplePath}...`);
-    
+
     // Compile the TypeScript file to JavaScript
     const jsPath = examplePath.replace('.ts', '.js');
-    execSync(`npx tsc "${examplePath}" --outDir examples --module esnext --target es2020 --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop`, {
-      cwd: __dirname,
-      stdio: 'inherit'
-    });
-    
+    execSync(
+      `npx tsc "${examplePath}" --outDir examples --module esnext --target es2020 --moduleResolution node --allowSyntheticDefaultImports --esModuleInterop`,
+      {
+        cwd: __dirname,
+        stdio: 'inherit',
+      },
+    );
+
     // Run the compiled JavaScript
     const relativePath = relative(__dirname, jsPath);
     execSync(`node "${relativePath}"`, {
       cwd: __dirname,
-      stdio: 'inherit'
+      stdio: 'inherit',
     });
-    
+
     console.log(`✅ Example completed successfully!`);
-    
   } catch (error) {
     console.error(`❌ Error running example:`, error.message);
     process.exit(1);

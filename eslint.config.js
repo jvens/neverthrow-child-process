@@ -29,6 +29,8 @@ export default typescriptEslint.config(
     },
     rules: {
       ...jest.configs.recommended.rules,
+      // Allow conditional expects in Result-based tests
+      'jest/no-conditional-expect': 'off',
     },
   },
   {
@@ -36,9 +38,11 @@ export default typescriptEslint.config(
       'dist/',
       'coverage/',
       'node_modules/',
+      'examples/',
       '*.config.js',
       '*.config.cjs',
       'jest.setup.js',
+      'run-example.js',
     ],
   },
 );

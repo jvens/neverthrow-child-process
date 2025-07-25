@@ -10,12 +10,18 @@ import type {
   ExecSyncResult,
 } from './types';
 
+interface SyncErrorWithOutput {
+  status: number;
+  stdout?: Buffer | string;
+  stderr?: Buffer | string;
+}
+
 /**
  * Synchronously executes a command in a shell and returns the output.
  * @param command - The command to run, with space-separated arguments
  * @param options - Optional execution options
  * @returns Result containing the command output or a ProcessError
- * 
+ *
  * @example
  * ```typescript
  * const result = execSync('echo "Hello World"');
@@ -41,12 +47,13 @@ export function execSync(
       error.status !== 0 &&
       'stdout' in error
     ) {
-      const stdout = error.stdout?.toString() || '';
-      const stderr = (error as any).stderr?.toString() || '';
+      const syncError = error as SyncErrorWithOutput;
+      const stdout = syncError.stdout?.toString() ?? '';
+      const stderr = syncError.stderr?.toString() ?? '';
       return err(
         new NonZeroExitError(
-          `Command failed with exit code ${error.status}`,
-          error.status as number,
+          `Command failed with exit code ${syncError.status}`,
+          syncError.status,
           command,
           [],
           stdout,
@@ -66,7 +73,7 @@ export function execSync(
  * @param args - Arguments to pass to the file
  * @param options - Optional execution options
  * @returns Result containing the command output or a ProcessError
- * 
+ *
  * @example
  * ```typescript
  * const result = execFileSync('node', ['--version']);
@@ -93,12 +100,13 @@ export function execFileSync(
       error.status !== 0 &&
       'stdout' in error
     ) {
-      const stdout = error.stdout?.toString() || '';
-      const stderr = (error as any).stderr?.toString() || '';
+      const syncError = error as SyncErrorWithOutput;
+      const stdout = syncError.stdout?.toString() ?? '';
+      const stderr = syncError.stderr?.toString() ?? '';
       return err(
         new NonZeroExitError(
-          `Command failed with exit code ${error.status}`,
-          error.status as number,
+          `Command failed with exit code ${syncError.status}`,
+          syncError.status,
           file,
           args,
           stdout,
@@ -118,7 +126,7 @@ export function execFileSync(
  * @param args - List of string arguments
  * @param options - Optional spawn options
  * @returns Result containing spawn result details or a ProcessError
- * 
+ *
  * @example
  * ```typescript
  * const result = spawnSync('ls', ['-la']);
@@ -158,11 +166,7 @@ export function spawnSync<T = Buffer>(
     // Check if killed by signal
     if (result.signal) {
       return err(
-        mapNodeError(
-          new Error(`Process killed by signal ${result.signal}`),
-          command,
-          args,
-        ),
+        mapNodeError(new Error(`Process killed by signal ${result.signal}`), command, args),
       );
     }
 

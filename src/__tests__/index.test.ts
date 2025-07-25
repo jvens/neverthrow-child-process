@@ -54,9 +54,9 @@ describe('Package exports', () => {
 });
 
 describe('Integration tests', () => {
-  it('should work with direct imports from main package', async () => {
+  it('should work with direct imports from main package', () => {
     const result = index.execSync('echo "Integration test"', { encoding: 'utf8' });
-    
+
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
       expect(result.value.toString().trim()).toBe('Integration test');
@@ -65,7 +65,7 @@ describe('Integration tests', () => {
 
   it('should work with async imports from main package', async () => {
     const result = await index.exec('echo "Async integration test"');
-    
+
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
       expect(result.value.stdout.trim()).toBe('Async integration test');
@@ -74,7 +74,7 @@ describe('Integration tests', () => {
 
   it('should work with sync module imports', () => {
     const result = index.sync.execSync('echo "Sync module test"', { encoding: 'utf8' });
-    
+
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
       expect(result.value.toString().trim()).toBe('Sync module test');
@@ -83,7 +83,7 @@ describe('Integration tests', () => {
 
   it('should work with async module imports', async () => {
     const result = await index.async.exec('echo "Async module test"');
-    
+
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
       expect(result.value.stdout.trim()).toBe('Async module test');
@@ -92,7 +92,7 @@ describe('Integration tests', () => {
 
   it('should handle errors properly with main package imports', () => {
     const result = index.execSync('nonexistent-integration-command');
-    
+
     expect(result.isErr()).toBe(true);
     if (result.isErr()) {
       // Command not found can be either ProcessNotFoundError or NonZeroExitError depending on shell

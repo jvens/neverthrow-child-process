@@ -43,34 +43,38 @@ export interface ProcessError extends Error {
  * Error thrown when the executable/command cannot be found.
  * Corresponds to Node.js ENOENT error.
  */
-export class ProcessNotFoundError implements ProcessError {
+export class ProcessNotFoundError extends Error implements ProcessError {
   readonly name = 'ProcessNotFoundError' as const;
   constructor(
     readonly message: string,
     readonly command?: string,
     readonly args?: readonly string[],
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when permission is denied to execute the command.
  * Corresponds to Node.js EACCES and EPERM errors.
  */
-export class PermissionDeniedError implements ProcessError {
+export class PermissionDeniedError extends Error implements ProcessError {
   readonly name = 'PermissionDeniedError' as const;
   constructor(
     readonly message: string,
     readonly command?: string,
     readonly args?: readonly string[],
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when a process times out.
  */
-export class ProcessTimeoutError implements ProcessError {
+export class ProcessTimeoutError extends Error implements ProcessError {
   readonly name = 'ProcessTimeoutError' as const;
   constructor(
     readonly message: string,
@@ -78,28 +82,32 @@ export class ProcessTimeoutError implements ProcessError {
     readonly args?: readonly string[],
     readonly timeout?: number,
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when a process is killed by a signal.
  */
-export class ProcessKilledError implements ProcessError {
+export class ProcessKilledError extends Error implements ProcessError {
   readonly name = 'ProcessKilledError' as const;
+  readonly killed = true;
   constructor(
     readonly message: string,
     readonly command?: string,
     readonly args?: readonly string[],
     readonly signal?: NodeJS.Signals | null,
     readonly cause?: unknown,
-  ) {}
-  readonly killed = true;
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when a process exits with a non-zero exit code.
  */
-export class NonZeroExitError implements ProcessError {
+export class NonZeroExitError extends Error implements ProcessError {
   readonly name = 'NonZeroExitError' as const;
   constructor(
     readonly message: string,
@@ -109,27 +117,31 @@ export class NonZeroExitError implements ProcessError {
     readonly stdout?: string,
     readonly stderr?: string,
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when invalid arguments are provided to a child process operation.
  */
-export class InvalidArgumentError implements ProcessError {
+export class InvalidArgumentError extends Error implements ProcessError {
   readonly name = 'InvalidArgumentError' as const;
   constructor(
     readonly message: string,
     readonly command?: string,
     readonly args?: readonly string[],
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * General spawn error for child process operations.
  * Used for errors during process spawning.
  */
-export class SpawnError implements ProcessError {
+export class SpawnError extends Error implements ProcessError {
   readonly name = 'SpawnError' as const;
   constructor(
     readonly message: string,
@@ -137,32 +149,47 @@ export class SpawnError implements ProcessError {
     readonly args?: readonly string[],
     readonly code?: string,
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error thrown when the stdout/stderr buffer exceeds the maximum size.
  */
-export class MaxBufferExceededError implements ProcessError {
+export class MaxBufferExceededError extends Error implements ProcessError {
   readonly name = 'MaxBufferExceededError' as const;
   constructor(
     readonly message: string,
     readonly command?: string,
     readonly args?: readonly string[],
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
 }
 
 /**
  * Error used when the underlying error type cannot be determined.
  * This is a catch-all for unexpected error conditions.
  */
-export class UnknownError implements ProcessError {
+export class UnknownError extends Error implements ProcessError {
   readonly name = 'UnknownError' as const;
   constructor(
     readonly message: string,
     readonly cause?: unknown,
-  ) {}
+  ) {
+    super(message);
+  }
+}
+
+interface ExecErrorLike {
+  message?: string;
+  code?: string | number | null;
+  signal?: NodeJS.Signals | null;
+  killed?: boolean;
+  stdout?: string;
+  stderr?: string;
 }
 
 /**
@@ -181,11 +208,11 @@ export function mapNodeError(
 ): ProcessError {
   // Handle ExecException errors (from exec/execFile)
   if (error && typeof error === 'object') {
-    const execErr = error as any; // Use any to handle various error structures
-    const message = execErr.message || 'Unknown error';
+    const execErr = error as ExecErrorLike;
+    const message = execErr.message ?? 'Unknown error';
 
     // Check for signal termination first (can exist without code)
-    if ('signal' in execErr && execErr.signal) {
+    if (execErr.signal) {
       return new ProcessKilledError(message, command, args, execErr.signal, error);
     }
 
@@ -205,16 +232,28 @@ export function mapNodeError(
 
     // Check for non-zero exit codes (numeric codes)
     if (typeof execErr.code === 'number' && execErr.code !== 0) {
-      return new NonZeroExitError(message, execErr.code, command, args, undefined, undefined, error);
+      return new NonZeroExitError(
+        message,
+        execErr.code,
+        command,
+        args,
+        undefined,
+        undefined,
+        error,
+      );
     }
   }
 
   // Handle Error objects with specific messages
   if (error instanceof Error) {
     const message = error.message;
-    
+
     // Check for max buffer exceeded error
-    if (message.includes('maxBuffer') || message.includes('stdout maxBuffer') || message.includes('stderr maxBuffer')) {
+    if (
+      message.includes('maxBuffer') ||
+      message.includes('stdout maxBuffer') ||
+      message.includes('stderr maxBuffer')
+    ) {
       return new MaxBufferExceededError(message, command, args, error);
     }
 

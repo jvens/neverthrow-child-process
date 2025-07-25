@@ -15,11 +15,7 @@ import type {
 /**
  * Re-export common child_process types for convenience
  */
-export type {
-  ChildProcess,
-  Serializable,
-  StdioOptions,
-};
+export type { ChildProcess, Serializable, StdioOptions };
 
 /**
  * Options for exec operations
