@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/jvens/neverthrow-child-process/compare/v1.0.0...v1.1.0) (2025-08-05)
+
+
+### Bug Fixes
+
+* enable comments in TypeScript output by setting removeComments to false ([97257df](https://github.com/jvens/neverthrow-child-process/commit/97257dffd01d0bac39f0909ad05a5fbf7907cb72))
+* exclude tsup.config.ts from TypeScript compilation and add '*.config.ts' to ESLint ignores ([ac9a4f2](https://github.com/jvens/neverthrow-child-process/commit/ac9a4f2ea05060e0dc61fdc3bbc2d95d985c8922))
+* include tsup.config.ts in TypeScript compilation ([e09788a](https://github.com/jvens/neverthrow-child-process/commit/e09788a2d60e6eadf0a7021e2ca62136afe857c9))
+* set package type to module for ESM compatibility ([1fa72fb](https://github.com/jvens/neverthrow-child-process/commit/1fa72fbe2ff575d99387c9a15bd4e16d090299ee))
+
+
+### Features
+
+* add script to fix ESM import paths and create VSCode settings ([fc35a06](https://github.com/jvens/neverthrow-child-process/commit/fc35a0635efcdf56608f01d92d3d4a89c0e38468))
+
 # 1.0.0 (2025-07-25)
 
 
