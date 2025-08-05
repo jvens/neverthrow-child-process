@@ -2,24 +2,14 @@
   "name": "@jvens/neverthrow-child-process",
   "version": "1.0.0",
   "description": "Node.js child_process wrapped in neverthrow Result types for type-safe error handling",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./sync": {
-      "require": "./dist/cjs/sync.js",
-      "import": "./dist/esm/sync.js",
-      "types": "./dist/types/sync.d.ts"
-    },
-    "./async": {
-      "require": "./dist/cjs/async.js",
-      "import": "./dist/esm/async.js",
-      "types": "./dist/types/async.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.es.js"
     }
   },
   "files": [
@@ -28,11 +18,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json && node scripts/fix-esm-imports.js",
-    "build:types": "tsc -p tsconfig.types.json",
-    "clean": "rm -rf dist",
+    "build": "tsup",
+    "clean": "rm -rf ./dist",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -91,6 +78,7 @@
     "semantic-release": "^24.2.0",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.7.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
