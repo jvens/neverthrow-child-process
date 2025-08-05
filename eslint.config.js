@@ -41,6 +41,7 @@ export default typescriptEslint.config(
       'examples/',
       '*.config.js',
       '*.config.cjs',
+      '*.config.ts',
       'jest.setup.js',
       'run-example.js',
     ],
