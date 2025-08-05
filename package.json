@@ -2,7 +2,6 @@
   "name": "@jvens/neverthrow-child-process",
   "version": "1.0.0",
   "description": "Node.js child_process wrapped in neverthrow Result types for type-safe error handling",
-  "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
@@ -31,7 +30,7 @@
   "scripts": {
     "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:esm": "tsc -p tsconfig.esm.json && node scripts/fix-esm-imports.js",
     "build:types": "tsc -p tsconfig.types.json",
     "clean": "rm -rf dist",
     "test": "jest",
